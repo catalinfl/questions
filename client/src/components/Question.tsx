@@ -11,7 +11,7 @@ const Question = (question: CreateQuestion, index: number) => {
         <div className="flex col-span-3 flex-row items-center">
             <div className="flex w-full flex-col">
                 <h1 className="font-bold text-sm items-center flex-1 text-secondary"> Category: <span className="text-black"> {question.category.slice(0, 1).toUpperCase() + question.category.slice(1, question.category.length)} </span> </h1>
-                <h1 className="font-bold text-sm items-center flex-1 text-secondary"> Answers: <span className="text-black"> {question?.answers} </span> </h1>
+                {/* <h1 className="font-bold text-sm items-center flex-1 text-secondary">{question.answers !== "undefined" ? Answers: <span className="text-black"> question?.answers} </span> </h1> */}
             </div>
             <div className="flex">
                 <p className="text-5xl p-1 font-bold w-16 h-16 text-center text-white items-center justify-center bg-secondary rounded-full"> ? </p>

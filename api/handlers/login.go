@@ -3,7 +3,6 @@ package handlers
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"io"
 	"net/http"
 
@@ -19,8 +18,6 @@ type User struct {
 
 func GoogleLogin(c *fiber.Ctx) error {
 	url := config.GoogleConfig().Endpoint.AuthURL + "?client_id=" + config.GoogleConfig().ClientID + "&redirect_uri=" + config.GoogleConfig().RedirectURL + "&response_type=code&scope=openid%20profile%20email&state=state"
-
-	fmt.Println(url)
 
 	c.Status(fiber.StatusSeeOther)
 	isRedirected := false
@@ -63,25 +60,42 @@ func Callback(c *fiber.Ctx) error {
 	userData, err := io.ReadAll(resp.Body)
 	json.Unmarshal(userData, &user)
 
-	fmt.Println(user)
-
 	if err != nil {
 		return c.SendStatus(fiber.StatusBadRequest)
 	}
 
-	fmt.Println(string(userData))
-
 	c.Status(fiber.StatusOK)
+
+	c.Cookie(&fiber.Cookie{
+		Name:     "user",
+		Value:    user.Name,
+		Expires:  token.Expiry,
+		Path:     "/",
+		HTTPOnly: true,
+		Secure:   true,
+		SameSite: "Strict",
+	})
+
+	c.Cookie(&fiber.Cookie{
+		Name:     "connected",
+		Value:    "true",
+		Expires:  token.Expiry,
+		Path:     "/",
+		Secure:   true,
+		HTTPOnly: false,
+		SameSite: "Strict",
+	})
 
 	c.Cookie(&fiber.Cookie{
 		Name:     "token",
 		Value:    token.AccessToken,
 		Expires:  token.Expiry,
 		Path:     "/",
+		HTTPOnly: true,
 		Secure:   true,
-		SameSite: "None",
+		SameSite: "Strict",
 	})
 
-	return c.Redirect("http://localhost:5173")
+	return c.Redirect("http://localhost:5173/create-question")
 
 }

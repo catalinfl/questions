@@ -1,5 +1,6 @@
 import axios from "axios"
-import { ChangeEvent, useState } from "react"
+import { ChangeEvent, useEffect, useState } from "react"
+
 
 type Category = "life" | "education" | "health" | "art" | "politics" | "literature" | "movies" | "music" | "sports" | "geography" | "history" | "science" | "technology"
 
@@ -17,9 +18,6 @@ const CreateQuestionComponent = () => {
     description: "",
     category: "life"
   }
-
-
-
 
   const [createQuestion, setCreateQuestion] = useState<CreateQuestion>(initialCreateQuestion)
 
@@ -56,6 +54,24 @@ const CreateQuestionComponent = () => {
     window.location.href = "http://localhost:3000/api/login"
   }
 
+  const [isConnected, setIsConnected] = useState<boolean>(false)
+
+  useEffect(() => {
+
+    document.cookie.split(";").forEach((cookie) => {
+      if (cookie.includes("connected")) {
+        setIsConnected(true)
+      }
+    }
+    )
+
+  }, [])
+
+
+
+  
+
+
   return (
     <div className="flex flex-col lg:flex-row mx-auto border border-secondary mt-2 rounded-lg p-3 lg:min-h-[800px] 
     bg-base-100
@@ -66,7 +82,7 @@ const CreateQuestionComponent = () => {
           <p className="w-full max-w-xl justify-center font-bold text-secondary"> Put a question </p>
           <input type="text" className="input input-primary w-full max-w-xl my-2" onChange={(e: ChangeEvent<HTMLInputElement>) => handleChange("question", e)} />
           <p className="w-full max-w-xl justify-center font-bold text-secondary"> Description of the question </p>
-          <textarea className="textarea textarea-primary w-full h-1/2 max-w-xl my-2" onChange={(e: ChangeEvent<HTMLTextAreaElement>) => handleChange("description", e)} />
+          <textarea className="textarea resize-none textarea-primary w-full h-1/2 max-w-xl my-2" onChange={(e: ChangeEvent<HTMLTextAreaElement>) => handleChange("description", e)} />
           <p className="w-full max-w-xl justify-center font-bold text-center my-2 text-secondary"> Set a category </p>
           <select defaultValue="See categories" onChange={(e: ChangeEvent<HTMLSelectElement>) => handleChange("category", e)} className="select select-primary w-full max-w-xs">
             <option> See categories </option>
@@ -84,11 +100,13 @@ const CreateQuestionComponent = () => {
             <option> Education </option>
             <option> Life </option>
           </select>
+          {!isConnected &&
           <div className="mt-3 bg-white border border-primary text-secondary text-[0.9rem] text-center p-6 w-full max-w-sm">
               <p> You are not connected. </p>
               <p> <span className="font-bold cursor-pointer" onClick={() => handleFetchSignIn()}>  Sign in with google </span>
-                or create a question as <span className="font-bold"> Guest </span> </p>
+                or create a question as <span className="font-bold"> Guest </span> </p> 
           </div>
+          }
           <button className="btn btn-secondary mt-12 w-36 text-white" onClick={() => onHandleSubmit()}>
             Submit question
           </button>

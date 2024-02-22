@@ -7,6 +7,7 @@ import AllQuestions from './pages/AllQuestions.tsx'
 import Question from './pages/Question.tsx'
 import CreateQuestion from './pages/CreateQuestion.tsx'
 import PopularQuestions from './pages/PopularQuestions.tsx'
+import { QueryClient, QueryClientProvider } from 'react-query'
 
 const router = createBrowserRouter([
   { path: '/', element: <Home />, errorElement: <h1> Error page </h1> },
@@ -16,8 +17,12 @@ const router = createBrowserRouter([
   { path: '/create-question', element: <CreateQuestion /> }
 ])
 
+const client = new QueryClient()
+
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <QueryClientProvider client={client}> 
+      <RouterProvider router={router} />
+    </QueryClientProvider>
   </React.StrictMode>,
 )

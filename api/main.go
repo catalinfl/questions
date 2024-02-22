@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/catalinfl/questions/config"
 	"github.com/catalinfl/questions/routes"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
@@ -15,7 +16,11 @@ func main() {
 		AllowOrigins:     "http://localhost:5173",
 	}))
 
+	config.ConnectDatabase()
+
 	routes.Login(app)
+	routes.Question(app)
+	routes.Answer(app)
 
 	app.Listen(":3000")
 }
