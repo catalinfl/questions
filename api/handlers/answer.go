@@ -26,7 +26,7 @@ func CreateAnswer(c *fiber.Ctx) error {
 		answer.Author = "Guest"
 	}
 
-	if answer.Answer == "" || len(answer.Answer) < 10 {
+	if answer.Answer == "" {
 		return c.JSON(fiber.Map{
 			"message": "Answer is too short",
 		})
@@ -48,7 +48,6 @@ func CreateAnswer(c *fiber.Ctx) error {
 		"message": "Answer created",
 		"answer":  answer,
 	})
-
 }
 
 func GetAnswers(c *fiber.Ctx) error {
@@ -60,4 +59,27 @@ func GetAnswers(c *fiber.Ctx) error {
 
 	return c.JSON(answers)
 
+}
+
+func ModifyReputation(c *fiber.Ctx) error {
+	id := c.Params("id")
+
+	var answer models.Answer
+
+	user := c.Cookies("user")
+
+	if user == "" {
+		return c.SendStatus(fiber.StatusUnauthorized)
+	}
+
+	config.Database.Where("id = ?", id).First(&answer)
+
+	answer.Reputation++
+
+	config.Database.Save(&answer)
+
+	return c.JSON(fiber.Map{
+		"message": "Reputation modified",
+		"answer":  answer,
+	})
 }

@@ -15,21 +15,9 @@ const Navbar = () => {
       <Link to="/create-question">
         <li className="font-bold"><a>Put a question</a></li>
       </Link>
-      <li>
-        <details>
-          <summary>
-            Answer
-          </summary>
-          <ul className="p-2 bg-base-100 lg:w-48  text-secondary rounded-t-none">
-            <Link to="/questions" className="flex w-full">
-            <li className="flex w-full"><a>See questions </a></li>
-            </Link>
-            <Link to="/popular-questions" className="text-nowrap w-full flex">
-            <li className="flex w-full"><a>Popular questions</a></li>
-            </Link>
-          </ul>
-        </details>
-      </li>
+      <Link to="/questions">
+        <li className="font-bold"><a>See questions</a></li>
+      </Link>
     </ul>
   </div>
 </div>
