@@ -12,7 +12,3 @@ Q&A project made with Go Fiber and React.
 - ReactQuery
 - TailwindCSS
 - DaisyUI (for theme and some components)
-
-## Usage <a name = "usage"></a>
-
-Add notes about how to use the system.
